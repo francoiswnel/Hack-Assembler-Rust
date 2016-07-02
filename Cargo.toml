@@ -1,0 +1,5 @@
+[package]
+
+name = "rhasm"
+version = "0.0.1"
+authors = [ "Francois W. Nel <francoiswnel@gmail.com>" ]
