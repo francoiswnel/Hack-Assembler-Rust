@@ -1,13 +1,7 @@
-use std::io;
-use std::io::prelude::*;
 use std::env;
+use std::io::prelude::*;
+use std::error::Error;
 use std::fs::File;
-
-fn create_file (file_name: &str) -> Result<(), io::Error> {
-    let mut output_file = try!(File::create(file_name));
-    try!(output_file.write_all(b"Test"));
-    Ok(())
-}
 
 fn main() {
     let argv: Vec<_> = env::args().collect();
@@ -24,5 +18,13 @@ fn main() {
         output_file_name = argv[2].to_string();
     }
 
-    create_file(&output_file_name);
+    let mut output_file = match File::create(&output_file_name) {
+        Err(why) => panic!("Failed to create output file: {}", why.description()),
+        Ok(output_file) => output_file,
+    };
+
+    match output_file.write_all(input_file_name.as_bytes()) {
+        Err(why) => panic!("Failed to write to {}: {}", &output_file_name, why.description()),
+        Ok(_) => return,
+    }
 }
